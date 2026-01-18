@@ -20,16 +20,13 @@ jobs:
       - name: Setup Node
         uses: actions/setup-node@v4
         with:
-          node-version: 20
+          node-version: 18
 
       - name: Install dependencies
         run: npm ci
 
       - name: Build Astro
         run: npm run build
-
-      - name: Check dist folder
-        run: ls -la dist
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
@@ -39,8 +36,8 @@ jobs:
   deploy:
     needs: build
     runs-on: ubuntu-latest
-
     steps:
       - name: Deploy to GitHub Pages
         id: deployment
         uses: actions/deploy-pages@v4
+
