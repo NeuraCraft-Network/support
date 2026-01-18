@@ -1,8 +1,25 @@
 ---
+import { glob } from "astro:content";
+
+export async function getStaticPaths() {
+  const docs = await glob("../content/docs/**/*.md");
+
+  return docs.map((doc) => ({
+    params: { slug: doc.slug.split("/") },
+  }));
+}
+
 const { slug } = Astro.params;
+const page = await glob("../content/docs/**/*.md").then((docs) =>
+  docs.find((d) => d.slug === slug.join("/"))
+);
 ---
 <html>
   <body>
-    <h1>Page: {slug}</h1>
+    <h1>{page?.frontmatter.title ?? slug.join("/")}</h1>
+    <article>
+      <Astro.render content={page?.content} />
+    </article>
   </body>
 </html>
+
